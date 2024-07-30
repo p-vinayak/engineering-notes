@@ -16,6 +16,10 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 		- EG: December 3rd (example fall end date) to May 5th (example spring end date)
 	- J-term window (from end of fall to end of J term)
 		- EG: December 3rd (example fall end date) to Jan 14th (example J term end date)
+- Teamworks meeting notes (their API has some nuances)
+
+![teamworks_meeting_notes](./teamworks_meeting_notes.png)
+
 ### Tips
 - API allows dry runs for testing
 
@@ -29,9 +33,6 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 public function handle()
 {
 	$currentYearTerm = DB::connection("j1")->query()->...
-	
-	$roster = $j1DataService->getAthleticRosterForYearTerm("2425", "FA")
-	$ids = // convert roster response to id nums here
 	$schedules = $j1DataService->getStudentSchedulesForYearTerm($ids, "2425", "FA")
 	$csv = // convert schedule to CSV (may require more data than just schedules)
 	try {
@@ -59,7 +60,7 @@ SELECT * FROM SPORTS_TRACKING WHERE YR_CDE = '2324' AND TRM_CDE = 'SP'
 
 #### getStudentSchedulesForYearTerm()
 ```sql
-
+TODO
 ```
 
 ### Tests
