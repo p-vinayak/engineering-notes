@@ -14,11 +14,14 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 	- We need to maintain a mapping of term id/descriptor, what did he mean?
 		- **Term ID in arms should be sent over as the term description (not the term ID from the SIS). We are expected to maintain a mapping between term id of the SIS and term description that we provide to ARMS for internal use cases. But, the term description we are planning to send to ARMS is already mapped in J1 to the appropriate year term code, so there's no need to do anything.**
 	- There are a maximum of 2 meeting patterns per course, is this going to cause an issue?
-		- 
+		- **According to others, there should never be a course with more than 2 meeting patterns. This is a guess, but a course with two meeting patterns means a course like "SCS 100 01" that has two different meeting times.**
 - API Behavior
 	- Can we import schedules for multiple semesters?
+		- 
 	- What if multiple semesters have courses with 3 different meeting patterms?
+		- 
 	- Can we get rid of schedules? What if someone's schedule changes?
+		- 
 
 ### Notes
 - Current year term logic (from Chelsea)
