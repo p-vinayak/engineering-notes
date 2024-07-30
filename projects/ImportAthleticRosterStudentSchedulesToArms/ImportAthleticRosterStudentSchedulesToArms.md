@@ -12,7 +12,9 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 	- **Custom logic in the notes section**
 - Teamworks engineer said:
 	- We need to maintain a mapping of term id/descriptor, what did he mean?
+		- **Term ID in arms should be sent over as the term description (not the term ID from the SIS). We are expected to maintain a mapping between term id of the SIS and term description that we provide to ARMS for internal use cases. But, the term description we are planning to send to ARMS is already mapped in J1 to the appropriate year term code, so there's no need to do anything.**
 	- There are a maximum of 2 meeting patterns per course, is this going to cause an issue?
+		- 
 - API Behavior
 	- Can we import schedules for multiple semesters?
 	- What if multiple semesters have courses with 3 different meeting patterms?
@@ -45,6 +47,7 @@ public function handle()
 	$currentYearTerm = DB::connection("j1")->query()->...
 	$schedules = $j1DataService->getStudentSchedulesForYearTerm($ids, "2425", "FA")
 	$csv = // convert schedule to CSV (may require more data than just schedules)
+	// Skip online courses (those will null days/starttime/endtime in the query)
 	try {
 		$importId = $teamworksApiService->importEnrollments() // internally calls async endpoint and polls until fail or complete
 	} catch (\Throwable $exception) {
@@ -57,6 +60,50 @@ public function handle()
 ```
 
 ### Queries/Sub Logic
+#### Query to API CSV Conversion Logic
+| API CSV Column            | Query Column                         |
+| ------------------------- | ------------------------------------ |
+| School ID*                | Student ID                           |
+| Alternate ID              |                                      |
+| Groups                    |                                      |
+| Student First Name        |                                      |
+| Student Last Name         |                                      |
+| Preferred Name            |                                      |
+| Student Email             |                                      |
+| Academic Year             |                                      |
+| College Code              |                                      |
+| Primary Major Code        |                                      |
+| Primary Major Description |                                      |
+| Cumulative GPA            |                                      |
+| Race or Ethnicity         |                                      |
+| Gender                    |                                      |
+| Subject Code*             | Course Code (first 3 letters parsed) |
+| Subject Name              |                                      |
+| Class Code*               | Course Code (first 6 letters parsed) |
+| Class Section Code*       | Course Code (last 2 digits parsed)   |
+| Class Description*        | Course Title                         |
+| Credits Attempted         |                                      |
+| Grade                     |                                      |
+| Score                     |                                      |
+| Class Building/Room       | Building + Room                      |
+| Monday?*                  | Parsed from Days                     |
+| Tuesday?*                 | Parsed from Days                     |
+| Wednesday?*               | Parsed from Days                     |
+| Thursday?*                | Parsed from Days                     |
+| Friday?*                  | Parsed from Days                     |
+| Saturday?*                | Parsed from Days                     |
+| Sunday?*                  | Parsed from Days                     |
+| Start Time                | Start Time                           |
+| End Time                  | End Time                             |
+| Term ID*                  | *Ask Amanda to add to query*         |
+| Term Start Date*          | Start Date                           |
+| Term End Date*            | End Date                             |
+| Professor First Name      |                                      |
+| Professor Last Name       |                                      |
+| Professor Email           |                                      |
+| Professor Unique ID       |                                      |
+| Professor Phone           |                                      |
+| Professor Office          |                                      |
 
 #### $currentYearterm
 ```sql
@@ -64,17 +111,12 @@ SELECT * FROM YEAR_TERM_TABLE WHERE TRM_END_DTE > GETDATE() AND TRM_CDE IN ('FA'
 ```
 
 ```php
-$currentAndFollowingYearTerms = //use query above
+$currentAndFollowingYearTerms | //use query above
 if ($currentAndFollowingYearTerms[0]) 
 ```
-#### getAthleticRosterForYearTerm()
-```sql
-SELECT * FROM SPORTS_TRACKING WHERE YR_CDE = '2324' AND TRM_CDE = 'SP'
-```
-
 #### getStudentSchedulesForYearTerm()
 ```sql
-TODO
+SELECT*FROM dbo.shu_GetAthleteCourseEnrollmentForARMS('2425', 'FA') WHERE STATUS = 'Enrolled';
 ```
 
 ### Tests
