@@ -8,6 +8,14 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 	- Just "FA"/"SP"? (traditional year term codes)
 	- Or "SU" as well?(supplementary terms)
 
+### Notes
+- Current year term logic (from Chelsea)
+	- Fall window (from end of spring to end of fall)
+		- EG: May 5th (example spring end date) to December 3rd (example fall end date)
+	- Spring window (from end of fall to end of spring)
+		- EG: December 3rd (example fall end date) to May 5th (example spring end date)
+	- J-term window (from end of fall to end of J term)
+		- EG: December 3rd (example fall end date) to Jan 14th (example J term end date)
 ### Tips
 - API allows dry runs for testing
 
@@ -15,7 +23,7 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 - [API Documentation](https://teamworksapp.com/docs/retain)
 - API Credentials in 1Password ("Teamworks Credentials")
 
-## Implementation
+### Implementation
 
 ```php
 public function handle()
