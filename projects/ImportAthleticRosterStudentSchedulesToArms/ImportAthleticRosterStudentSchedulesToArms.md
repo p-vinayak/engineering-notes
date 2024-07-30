@@ -28,8 +28,7 @@ Imports student schedules for athletic roster (current year term) from J1 to ARM
 ```php
 public function handle()
 {
-	$currentYearTerm = $j1DataService->getCurrentYearTerm(); // OR
-	$currentYearTerm = $j1DataService->getCurrentTraditionalYearTerm();
+	$currentYearTerm = DB::connection("j1")->query()->...
 	
 	$roster = $j1DataService->getAthleticRosterForYearTerm("2425", "FA")
 	$ids = // convert roster response to id nums here
@@ -44,6 +43,23 @@ public function handle()
 	$this->info("Some success message")
 	return Command::Success
 }
+```
+
+### Queries
+
+#### $currentYearterm
+```sql
+TODO
+```
+
+#### getAthleticRosterForYearTerm()
+```sql
+SELECT * FROM SPORTS_TRACKING WHERE YR_CDE = '2324' AND TRM_CDE = 'SP'
+```
+
+#### getStudentSchedulesForYearTerm()
+```sql
+
 ```
 
 ### Tests
